@@ -7,11 +7,11 @@ raw_gameday_data = requests.get(ESPN_gameday_url)
 print (raw_gameday_data.status_code)
 print (raw_gameday_data.encoding)
 
-soup = BeautifulSoup(raw_gameday_data.text, 'html.parser')
+soup = BeautifulSoup(raw_gameday_data.content, 'html.parser')
 
-games = soup.find_all('article')
-
-print (len(games))
+print(soup.find_all("article", attrs={"class": "scoreboard"}))
+#print(len(games))
+#print(games[0])
 
 
 #game_div = soup.find('div', attrs={'id': 'events'})
