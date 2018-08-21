@@ -1,26 +1,18 @@
+from splinter import Browser
 from bs4 import BeautifulSoup
-import requests, os
 
-ESPN_gameday_url = "http://www.espn.com/mlb/scoreboard"
-raw_gameday_data = requests.get(ESPN_gameday_url)
+browser = Browser('chrome', headless=True)
+url = 'http://www.espn.com/mlb/scoreboard'
 
-print (raw_gameday_data.status_code)
-print (raw_gameday_data.encoding)
+browser.visit(url)
+content = browser.html
+soup = BeautifulSoup(content, 'lxml')
 
-soup = BeautifulSoup(raw_gameday_data.content, 'html.parser')
+games = soup.findAll('article', {'class':'scoreboard'})
 
-print(soup.find_all("article", attrs={"class": "scoreboard"}))
-#print(len(games))
-#print(games[0])
-
-
-#game_div = soup.find('div', attrs={'id': 'events'})
-#games = game_div.find_all('article')
-
-#print (game_div.id)
-
-#os.remove("raw.txt")
-#f=open("soup.txt",'w+')
-#f.write(soup.text)
-#f.close
+for i in range(len(games)):
+	away = games[i].find('tr', {'class': 'away'}).find('span', {'class': 'sb-team-short'})
+	home = games[i].find('tr', {'class': 'home'}).find('span', {'class': 'sb-team-short'})
+	time = games[i].find('span', {'class': 'time'})
+	print ("{}@{} {}".format(away.text, home.text, time.text))
 
