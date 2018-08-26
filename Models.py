@@ -10,7 +10,8 @@ class Game(Base):
 	__tablename__ = 'game'
 	
 	id = Column(Integer, primary_key=True)
-	date_time = Column(String, nullable=False)
+	date = Column(String, nullable=False)
+	time = Column(String)
 	away_team = Column(String, nullable=False)
 	away_roster = Column(String)
 	home_team = Column(String, nullable=False)
