@@ -51,7 +51,12 @@ reddit = praw.Reddit(client_id = reddit_client_id,
 					 username = reddit_username)
 
 for game in games_db:
-	reddit.subreddit("PostHereAndIllBanYou").submit(title = "Pre-Game Thread: {}@{} {}".format(game.away_team, game.home_team, game.time),
-													selftext = "{}@{} {}".format(game.away_team, game.home_team, game.time))
-	
-	print ("{}@{} {}".format(game.away_team, game.home_team, game.time))
+	if game.pregame_URL is None:
+		submission = reddit.subreddit("PostHereAndIllBanYou").submit(title = "Pre-Game Thread: {}@{} {}".format(game.away_team, game.home_team, game.time),
+																	 selftext = "{}@{} {}".format(game.away_team, game.home_team, game.time))
+		game.pregame_URL = submission.permalink
+		session.add(game)
+	else:
+		print ( " Pre-Game thread posted: {}@{} {}".format(game.away_team, game.home_team, game.time))
+
+session.commit()
